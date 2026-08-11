@@ -1,0 +1,6 @@
+{
+  "name": "Blind Metro Paris",
+  "description": "Un jeu de mémoire et d'optimisation sur le réseau de métro parisien. Reliez deux stations à l'aveugle et comparez votre temps au trajet parfait.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
