@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, ArrowRight, Search } from 'lucide-react';
+import { MapPin, ArrowRight, Search, Activity, GitMerge, TrendingUp, ArrowUpRight } from 'lucide-react';
 import { METRO_LINES, METRO_ROUTES, STATIONS, ALL_STATION_NAMES, normalizeString, calculateOptimalPath } from './lib/metro';
+import { MetroTrainIcon } from './components/MetroTrainIcon';
 
 type GameState = 'start' | 'playing' | 'result';
 
@@ -111,14 +112,17 @@ export default function App() {
   const score = Math.max(0, Math.round((optimalTime / playerTime) * 100));
 
   return (
-    <div className="w-full h-full bg-[#F9FAFB] text-gray-800 flex justify-center font-sans overflow-hidden selection:bg-gray-200">
-      <div className="w-full max-w-md h-full flex flex-col relative">
+    <div className="w-full h-full bg-white text-gray-800 flex justify-center font-sans overflow-hidden selection:bg-gray-200">
+      <div className="w-full max-w-md h-full flex flex-col relative bg-white">
 
         {/* Header */}
-        <header className="flex justify-between items-center px-6 pt-8 pb-4 shrink-0">
-          <div className="font-semibold tracking-tight text-xl text-gray-900">MetroGuessr</div>
+        <header className="flex items-center px-6 pt-8 pb-4 shrink-0 relative h-20">
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none">
+            <MetroTrainIcon className="h-7 w-auto" />
+          </div>
+          
           {gameState === 'playing' && (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 ml-auto z-10">
               <span className="text-sm font-mono text-gray-500">{playerTime} min</span>
               <button 
                 onClick={() => setGameState('start')}
@@ -141,20 +145,56 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="flex-1 flex flex-col items-center justify-center p-6 text-center"
+                className="flex-1 flex flex-col p-6 h-full overflow-y-auto"
               >
-                <h1 className="text-4xl font-light text-gray-900 mb-6">Ligne Directe</h1>
-                <p className="text-gray-500 font-light text-sm max-w-[240px] mb-12 leading-relaxed">
-                  Des milliers de combinaisons. Zéro carte. Trouvez le trajet optimal.
-                </p>
+                <div className="flex flex-col mb-auto pt-4">
+                  <div className="inline-flex items-center gap-2 bg-[#F4F5F7] px-3 py-1.5 rounded-full w-fit mb-6">
+                    <Activity className="w-3 h-3 text-emerald-600" />
+                    <span className="text-xs font-medium text-gray-700">Le défi du métro</span>
+                  </div>
+                  
+                  <h1 className="text-4xl leading-[1.1] font-medium text-gray-900 tracking-tight mb-5">
+                    Trouvez le trajet optimal.
+                  </h1>
+                  
+                  <p className="text-gray-500 text-sm leading-relaxed mb-8 max-w-[280px]">
+                    Des milliers de combinaisons. Zéro carte. Entraînez votre mémoire du réseau.
+                  </p>
+                  
+                  <button onClick={initGame} className="group flex items-center gap-2 text-emerald-600 font-medium text-sm hover:text-emerald-700 transition-colors w-fit">
+                    Démarrer une partie <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </button>
+                </div>
 
-                <button 
-                  onClick={initGame}
-                  className="px-8 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors shadow-sm flex items-center gap-3 text-sm font-medium active:scale-95"
-                >
-                  Nouveau trajet
-                  <ArrowRight className="w-4 h-4 opacity-70" />
-                </button>
+                <div className="flex flex-col gap-3 mt-12 shrink-0 pb-6">
+                  <div className="bg-[#F4F5F7] rounded-3xl p-6">
+                    <div className="flex items-center gap-2 mb-6">
+                       <MapPin className="w-4 h-4 text-emerald-600" />
+                       <span className="text-xs font-medium text-gray-600">Stations du réseau</span>
+                    </div>
+                    <div className="text-5xl font-medium text-gray-900 tracking-tight mb-2">308</div>
+                    <div className="text-sm text-gray-500">Accessibles dans Paris</div>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <div className="flex-1 bg-[#F4F5F7] rounded-3xl p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <GitMerge className="w-4 h-4 text-emerald-600" />
+                        <span className="text-xs font-medium text-gray-600">Lignes</span>
+                      </div>
+                      <div className="text-3xl font-medium text-gray-900 tracking-tight mb-1">16</div>
+                      <div className="text-[11px] text-gray-500">Métro RATP</div>
+                    </div>
+                    <div className="flex-1 bg-[#F4F5F7] rounded-3xl p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <TrendingUp className="w-4 h-4 text-emerald-600" />
+                        <span className="text-xs font-medium text-gray-600">Score</span>
+                      </div>
+                      <div className="text-3xl font-medium text-gray-900 tracking-tight mb-1">/100</div>
+                      <div className="text-[11px] text-gray-500">Efficacité visée</div>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             )}
 
